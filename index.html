@@ -502,7 +502,7 @@
         <input type="number" id="jt-paket" placeholder="665" min="1" />
         <span class="unit">paket</span>
       </div>
-      <div class="input-error" id="jt-err">Masukkan nilai yang valid (> 0)</div>
+      <div class="input-error" id="jt-err">Masukkan nilai yang valid (Jumlah Paket minimal 2)</div>
       <button class="btn-hitung" onclick="hitungJitter()">Hitung Jitter</button>
       <div class="result-area" id="jt-result">
         <div class="result-label">Hasil</div>
@@ -803,16 +803,17 @@
   function hitungJitter() {
     const total = parseFloat(document.getElementById('jt-total').value);
     const paket = parseFloat(document.getElementById('jt-paket').value);
-    if (isNaN(total) || !paket || total < 0 || paket <= 0) {
+    if (isNaN(total) || !paket || total < 0 || paket <= 1) {
       showError('jt-err', true);
       document.getElementById('jt-result').classList.remove('show');
       return;
     }
     showError('jt-err', false);
-    const avgDetik = total / paket;
+    const avgDetik = total / (paket - 1);
     const avgMs    = avgDetik * 1000;
     document.getElementById('jt-steps').innerHTML = buildSteps([
-      { op: 'Rata-rata Jitter =', val: `${fmt(total,6)} / ${fmt(paket,0)}` },
+      { op: 'Rata-rata Jitter =', val: `${fmt(total,6)} / (${fmt(paket,0)} − 1)` },
+      { op: '=',                  val: `${fmt(total,6)} / ${fmt(paket-1,0)}` },
       { op: '=',                  val: `${avgDetik.toFixed(12)} detik` },
       { op: '=',                  val: `${fmt(avgMs,9)} ms` },
     ]);
