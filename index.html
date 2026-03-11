@@ -86,11 +86,10 @@
       background: var(--bg-card);
       border: 1px solid var(--border);
       border-radius: var(--radius);
-      overflow: visible;
+      overflow: hidden;
       box-shadow: var(--shadow);
       transition: box-shadow 0.25s ease, transform 0.25s ease;
       animation: fadeUp 0.5s ease both;
-      position: relative;
     }
 
     .qos-card:hover {
@@ -109,7 +108,6 @@
       gap: 0.6rem;
       padding: 1rem 1.25rem 0.9rem;
       border-bottom: 1px solid var(--border);
-      position: relative;
     }
 
     .card-num {
@@ -156,8 +154,6 @@
       transition: background 0.2s, color 0.2s;
       flex-shrink: 0;
       font-family: 'DM Sans', sans-serif;
-      position: relative;
-      z-index: 10;
       -webkit-tap-highlight-color: transparent;
     }
 
@@ -167,16 +163,15 @@
       color: #fff;
     }
 
+    /* popover di-render di body, posisi fixed */
     .info-popover {
-      position: absolute;
-      top: calc(100% + 10px);
-      right: 0;
+      position: fixed;
       width: 280px;
       background: #fff;
       border: 1px solid var(--border);
       border-radius: 10px;
-      box-shadow: 0 8px 32px rgba(0,0,0,0.13);
-      z-index: 999;
+      box-shadow: 0 8px 32px rgba(0,0,0,0.15);
+      z-index: 9999;
       padding: 1rem;
       display: none;
       animation: popIn 0.2s ease both;
@@ -184,23 +179,33 @@
 
     .info-popover.show { display: block; }
 
+    /* arrow dinamis via JS class */
     .info-popover::before {
       content: '';
       position: absolute;
-      top: -7px;
-      right: 8px;
       width: 13px;
       height: 13px;
       background: #fff;
       border-left: 1px solid var(--border);
       border-top: 1px solid var(--border);
+    }
+
+    .info-popover.arrow-top::before {
+      top: -7px;
+      right: 14px;
       transform: rotate(45deg);
+    }
+
+    .info-popover.arrow-bottom::before {
+      bottom: -7px;
+      right: 14px;
+      transform: rotate(225deg);
     }
 
     .popover-title {
       font-family: 'DM Serif Display', serif;
       font-size: 0.88rem;
-      color: var(--accent-color, var(--accent));
+      color: var(--pop-accent, #b5541a);
       margin-bottom: 0.7rem;
       padding-bottom: 0.5rem;
       border-bottom: 1px solid var(--border);
@@ -212,7 +217,7 @@
     .popover-formula {
       font-family: 'DM Mono', monospace;
       font-size: 0.75rem;
-      background: var(--bg-result, #f8f6f2);
+      background: var(--bg-result);
       border: 1px solid var(--border);
       border-radius: 6px;
       padding: 0.5rem 0.7rem;
@@ -238,12 +243,9 @@
 
     .popover-var-src {
       font-size: 0.68rem;
-      color: var(--accent-color, var(--accent));
+      color: var(--pop-accent, #b5541a);
       font-family: 'DM Mono', monospace;
       margin-top: 0.15rem;
-      display: flex;
-      align-items: flex-start;
-      gap: 0.25rem;
     }
 
     .card-body-qos { padding: 1.25rem; }
@@ -433,29 +435,7 @@
     <div class="card-head">
       <div class="card-num">1</div>
       <span class="card-title">Throughput</span>
-      <!-- tombol info -->
-      <button class="info-btn" data-target="pop-tp" aria-label="Info rumus">i</button>
-      <!-- popover throughput -->
-      <div class="info-popover" id="pop-tp">
-        <div class="popover-title">📐 Rumus Throughput</div>
-        <div class="popover-formula">(Jumlah Bytes × 8) / Time Span</div>
-        <div class="popover-vars">
-          <div class="popover-var-item">
-            <div class="popover-var-name">Jumlah Bytes</div>
-            <div class="popover-var-desc">Total ukuran semua paket yang diterima (bytes)</div>
-            <div class="popover-var-src">📍 Statistics → Capture File Properties</div>
-          </div>
-          <div class="popover-var-item">
-            <div class="popover-var-name">Time Span</div>
-            <div class="popover-var-desc">Selisih waktu paket pertama dan terakhir (detik)</div>
-            <div class="popover-var-src">📍 Kolom Time: nilai paket terakhir − pertama</div>
-          </div>
-          <div class="popover-var-item">
-            <div class="popover-var-name">× 8</div>
-            <div class="popover-var-desc">Konversi Bytes → Bits (1 byte = 8 bits)</div>
-          </div>
-        </div>
-      </div>
+      <button class="info-btn" data-popover="pop-tp" data-accent="#b5541a" aria-label="Info rumus">i</button>
     </div>
     <div class="card-body-qos">
       <div class="input-row">
@@ -482,24 +462,7 @@
     <div class="card-head">
       <div class="card-num">2</div>
       <span class="card-title">Delay</span>
-      <button class="info-btn" data-target="pop-dl" aria-label="Info rumus">i</button>
-      <!-- popover delay -->
-      <div class="info-popover" id="pop-dl">
-        <div class="popover-title">📐 Rumus Delay</div>
-        <div class="popover-formula">Rata-rata Delay = Total Delay / Jumlah Paket</div>
-        <div class="popover-vars">
-          <div class="popover-var-item">
-            <div class="popover-var-name">Total Delay</div>
-            <div class="popover-var-desc">Jumlah seluruh selisih waktu antar paket (Σ delta time)</div>
-            <div class="popover-var-src">📍 Kolom Time: hitung Σ (Time[n] − Time[n-1])</div>
-          </div>
-          <div class="popover-var-item">
-            <div class="popover-var-name">Jumlah Paket</div>
-            <div class="popover-var-desc">Total paket yang tertangkap Wireshark</div>
-            <div class="popover-var-src">📍 Statistics → Capture File Properties → Packets</div>
-          </div>
-        </div>
-      </div>
+      <button class="info-btn" data-popover="pop-dl" data-accent="#1a5c8a" aria-label="Info rumus">i</button>
     </div>
     <div class="card-body-qos">
       <div class="input-row">
@@ -526,24 +489,7 @@
     <div class="card-head">
       <div class="card-num">3</div>
       <span class="card-title">Jitter</span>
-      <button class="info-btn" data-target="pop-jt" aria-label="Info rumus">i</button>
-      <!-- popover jitter -->
-      <div class="info-popover" id="pop-jt">
-        <div class="popover-title">📐 Rumus Jitter</div>
-        <div class="popover-formula">Rata-rata Jitter = Total Jitter / Jumlah Paket</div>
-        <div class="popover-vars">
-          <div class="popover-var-item">
-            <div class="popover-var-name">Total Jitter</div>
-            <div class="popover-var-desc">Jumlah seluruh nilai absolut selisih delta time antar paket</div>
-            <div class="popover-var-src">📍 Σ |Delta Time[n] − Delta Time[n-1]| di Wireshark</div>
-          </div>
-          <div class="popover-var-item">
-            <div class="popover-var-name">Jumlah Paket</div>
-            <div class="popover-var-desc">Total paket yang tertangkap Wireshark</div>
-            <div class="popover-var-src">📍 Statistics → Capture File Properties → Packets</div>
-          </div>
-        </div>
-      </div>
+      <button class="info-btn" data-popover="pop-jt" data-accent="#2a7a4a" aria-label="Info rumus">i</button>
     </div>
     <div class="card-body-qos">
       <div class="input-row">
@@ -570,24 +516,7 @@
     <div class="card-head">
       <div class="card-num">4</div>
       <span class="card-title">Packet Loss</span>
-      <button class="info-btn" data-target="pop-pl" aria-label="Info rumus">i</button>
-      <!-- popover packet loss -->
-      <div class="info-popover" id="pop-pl">
-        <div class="popover-title">📐 Rumus Packet Loss</div>
-        <div class="popover-formula">(Lost Segment / Total Paket) × 100</div>
-        <div class="popover-vars">
-          <div class="popover-var-item">
-            <div class="popover-var-name">Lost Segment</div>
-            <div class="popover-var-desc">Jumlah paket yang hilang saat transmisi</div>
-            <div class="popover-var-src">📍 Wireshark filter: tcp.analysis.lost_segment</div>
-          </div>
-          <div class="popover-var-item">
-            <div class="popover-var-name">Total Paket</div>
-            <div class="popover-var-desc">Total paket yang tertangkap Wireshark</div>
-            <div class="popover-var-src">📍 Statistics → Capture File Properties → Packets</div>
-          </div>
-        </div>
-      </div>
+      <button class="info-btn" data-popover="pop-pl" data-accent="#7a1a4a" aria-label="Info rumus">i</button>
     </div>
     <div class="card-body-qos">
       <div class="input-row">
@@ -617,40 +546,163 @@
 
 </div>
 
+<!-- popover throughput -->
+<div class="info-popover" id="pop-tp">
+  <div class="popover-title">📐 Rumus Throughput</div>
+  <div class="popover-formula">(Jumlah Bytes × 8) / Time Span</div>
+  <div class="popover-vars">
+    <div class="popover-var-item">
+      <div class="popover-var-name">Jumlah Bytes</div>
+      <div class="popover-var-desc">Total ukuran semua paket yang diterima (bytes)</div>
+      <div class="popover-var-src">📍 Statistics → Capture File Properties</div>
+    </div>
+    <div class="popover-var-item">
+      <div class="popover-var-name">Time Span</div>
+      <div class="popover-var-desc">Selisih waktu paket pertama dan terakhir (detik)</div>
+      <div class="popover-var-src">📍 Kolom Time: nilai paket terakhir − pertama</div>
+    </div>
+    <div class="popover-var-item">
+      <div class="popover-var-name">× 8</div>
+      <div class="popover-var-desc">Konversi Bytes → Bits (1 byte = 8 bits)</div>
+    </div>
+  </div>
+</div>
+
+<!-- popover delay -->
+<div class="info-popover" id="pop-dl">
+  <div class="popover-title">📐 Rumus Delay</div>
+  <div class="popover-formula">Rata-rata Delay = Total Delay / Jumlah Paket</div>
+  <div class="popover-vars">
+    <div class="popover-var-item">
+      <div class="popover-var-name">Total Delay</div>
+      <div class="popover-var-desc">Jumlah seluruh selisih waktu antar paket (Σ delta time)</div>
+      <div class="popover-var-src">📍 Kolom Time: hitung Σ (Time[n] − Time[n-1])</div>
+    </div>
+    <div class="popover-var-item">
+      <div class="popover-var-name">Jumlah Paket</div>
+      <div class="popover-var-desc">Total paket yang tertangkap Wireshark</div>
+      <div class="popover-var-src">📍 Statistics → Capture File Properties → Packets</div>
+    </div>
+  </div>
+</div>
+
+<!-- popover jitter -->
+<div class="info-popover" id="pop-jt">
+  <div class="popover-title">📐 Rumus Jitter</div>
+  <div class="popover-formula">Rata-rata Jitter = Total Jitter / Jumlah Paket</div>
+  <div class="popover-vars">
+    <div class="popover-var-item">
+      <div class="popover-var-name">Total Jitter</div>
+      <div class="popover-var-desc">Jumlah seluruh nilai absolut selisih delta time antar paket</div>
+      <div class="popover-var-src">📍 Σ |Delta Time[n] − Delta Time[n-1]| di Wireshark</div>
+    </div>
+    <div class="popover-var-item">
+      <div class="popover-var-name">Jumlah Paket</div>
+      <div class="popover-var-desc">Total paket yang tertangkap Wireshark</div>
+      <div class="popover-var-src">📍 Statistics → Capture File Properties → Packets</div>
+    </div>
+  </div>
+</div>
+
+<!-- popover packet loss -->
+<div class="info-popover" id="pop-pl">
+  <div class="popover-title">📐 Rumus Packet Loss</div>
+  <div class="popover-formula">(Lost Segment / Total Paket) × 100</div>
+  <div class="popover-vars">
+    <div class="popover-var-item">
+      <div class="popover-var-name">Lost Segment</div>
+      <div class="popover-var-desc">Jumlah paket yang hilang saat transmisi</div>
+      <div class="popover-var-src">📍 Wireshark filter: tcp.analysis.lost_segment</div>
+    </div>
+    <div class="popover-var-item">
+      <div class="popover-var-name">Total Paket</div>
+      <div class="popover-var-desc">Total paket yang tertangkap Wireshark</div>
+      <div class="popover-var-src">📍 Statistics → Capture File Properties → Packets</div>
+    </div>
+  </div>
+</div>
+
 <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"></script>
 <script>
-  // deteksi touch device
   const isTouch = () => window.matchMedia('(hover: none)').matches;
 
   const allPopovers = document.querySelectorAll('.info-popover');
   const allBtns     = document.querySelectorAll('.info-btn');
 
-  function closeAll(except) {
-    allPopovers.forEach(p => { if (p !== except) p.classList.remove('show'); });
-    allBtns.forEach(b => { if (b.dataset.target !== except?.id) b.classList.remove('active'); });
+  // posisikan popover relatif ke tombol menggunakan getBoundingClientRect
+  function positionPopover(btn, popover) {
+    const rect      = btn.getBoundingClientRect();
+    const popWidth  = 280;
+    const popHeight = popover.offsetHeight;
+    const gap       = 10;
+    const margin    = 8;
+
+    const spaceBelow = window.innerHeight - rect.bottom;
+    const spaceAbove = rect.top;
+
+    let top, left;
+
+    // tentukan arah: bawah atau atas
+    if (spaceBelow >= popHeight + gap || spaceBelow >= spaceAbove) {
+      top = rect.bottom + gap + window.scrollY;
+      popover.classList.remove('arrow-bottom');
+      popover.classList.add('arrow-top');
+    } else {
+      top = rect.top - popHeight - gap + window.scrollY;
+      popover.classList.remove('arrow-top');
+      popover.classList.add('arrow-bottom');
+    }
+
+    // posisi horizontal: rata kanan tombol, jangan keluar viewport
+    left = rect.right - popWidth + window.scrollX;
+    if (left < margin) left = margin;
+    if (left + popWidth > window.innerWidth - margin) {
+      left = window.innerWidth - popWidth - margin;
+    }
+
+    popover.style.top  = top + 'px';
+    popover.style.left = left + 'px';
+  }
+
+  function closeAll(exceptPopover) {
+    allPopovers.forEach(p => {
+      if (p !== exceptPopover) p.classList.remove('show');
+    });
+    allBtns.forEach(b => {
+      if (document.getElementById(b.dataset.popover) !== exceptPopover) {
+        b.classList.remove('active');
+      }
+    });
   }
 
   allBtns.forEach(btn => {
-    const popover = document.getElementById(btn.dataset.target);
+    const popover = document.getElementById(btn.dataset.popover);
+    const accent  = btn.dataset.accent;
+
+    // terapkan warna accent ke popover
+    popover.style.setProperty('--pop-accent', accent);
 
     if (!isTouch()) {
       // desktop: hover
       btn.addEventListener('mouseenter', () => {
         closeAll(popover);
         popover.classList.add('show');
+        positionPopover(btn, popover);
         btn.classList.add('active');
       });
 
-      btn.closest('.card-head').addEventListener('mouseleave', (e) => {
-        if (!popover.contains(e.relatedTarget) && e.relatedTarget !== btn) {
+      btn.addEventListener('mouseleave', (e) => {
+        if (!popover.contains(e.relatedTarget)) {
           popover.classList.remove('show');
           btn.classList.remove('active');
         }
       });
 
-      popover.addEventListener('mouseleave', () => {
-        popover.classList.remove('show');
-        btn.classList.remove('active');
+      popover.addEventListener('mouseleave', (e) => {
+        if (e.relatedTarget !== btn) {
+          popover.classList.remove('show');
+          btn.classList.remove('active');
+        }
       });
     } else {
       // mobile/tablet: tap
@@ -660,6 +712,7 @@
         closeAll();
         if (!isOpen) {
           popover.classList.add('show');
+          positionPopover(btn, popover);
           btn.classList.add('active');
         }
       });
@@ -668,6 +721,21 @@
 
   // tutup popover klik di luar (touch)
   document.addEventListener('click', () => { if (isTouch()) closeAll(); });
+
+  // reposisi saat scroll atau resize
+  window.addEventListener('scroll', () => {
+    const openPopover = document.querySelector('.info-popover.show');
+    if (!openPopover) return;
+    const activeBtn = document.querySelector('.info-btn.active');
+    if (activeBtn) positionPopover(activeBtn, openPopover);
+  }, { passive: true });
+
+  window.addEventListener('resize', () => {
+    const openPopover = document.querySelector('.info-popover.show');
+    if (!openPopover) return;
+    const activeBtn = document.querySelector('.info-btn.active');
+    if (activeBtn) positionPopover(activeBtn, openPopover);
+  });
 
   function fmt(n, d = 6) {
     return parseFloat(n.toFixed(d)).toLocaleString('id-ID', { maximumFractionDigits: d });
