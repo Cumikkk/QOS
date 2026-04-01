@@ -163,7 +163,6 @@
       color: #fff;
     }
 
-    /* popover di-render di body, posisi fixed */
     .info-popover {
       position: fixed;
       width: 280px;
@@ -179,7 +178,6 @@
 
     .info-popover.show { display: block; }
 
-    /* arrow dinamis via JS class */
     .info-popover::before {
       content: '';
       position: absolute;
@@ -366,6 +364,67 @@
       font-weight: 500;
     }
 
+    /* kategori TIPHON */
+    .tiphon-badge {
+      display: flex;
+      align-items: center;
+      gap: 0.5rem;
+      margin-top: 0.85rem;
+      padding: 0.55rem 0.75rem;
+      border-radius: 7px;
+      border: 1px solid;
+      animation: fadeIn 0.3s ease both;
+    }
+
+    .tiphon-badge .tiphon-icon {
+      font-size: 1rem;
+      flex-shrink: 0;
+    }
+
+    .tiphon-badge .tiphon-info {
+      flex: 1;
+      min-width: 0;
+    }
+
+    .tiphon-badge .tiphon-label {
+      font-size: 0.62rem;
+      font-weight: 600;
+      letter-spacing: 0.1em;
+      text-transform: uppercase;
+      opacity: 0.65;
+      margin-bottom: 0.1rem;
+    }
+
+    .tiphon-badge .tiphon-kategori {
+      font-family: 'DM Serif Display', serif;
+      font-size: 0.92rem;
+    }
+
+    .tiphon-badge .tiphon-indeks {
+      font-family: 'DM Mono', monospace;
+      font-size: 0.72rem;
+      font-weight: 500;
+      padding: 2px 8px;
+      border-radius: 20px;
+      flex-shrink: 0;
+    }
+
+    /* warna per level */
+    .tiphon-lvl-4 { background: #edfaf3; border-color: #6fcf97; color: #1a5c35; }
+    .tiphon-lvl-4 .tiphon-indeks { background: #6fcf97; color: #fff; }
+
+    .tiphon-lvl-3 { background: #eaf4fb; border-color: #5aade0; color: #1a4a6e; }
+    .tiphon-lvl-3 .tiphon-indeks { background: #5aade0; color: #fff; }
+
+    .tiphon-lvl-2 { background: #fef9ec; border-color: #f0c040; color: #7a5a00; }
+    .tiphon-lvl-2 .tiphon-indeks { background: #f0c040; color: #fff; }
+
+    .tiphon-lvl-1 { background: #fff4ec; border-color: #e07a30; color: #7a3010; }
+    .tiphon-lvl-1 .tiphon-indeks { background: #e07a30; color: #fff; }
+
+    .tiphon-lvl-0 { background: #fdecea; border-color: #e05555; color: #7a1010; }
+    .tiphon-lvl-0 .tiphon-indeks { background: #e05555; color: #fff; }
+
     .loss-bar-wrap { margin-top: 0.75rem; }
 
     .loss-bar-track {
@@ -453,6 +512,7 @@
       <div class="result-area" id="tp-result">
         <div class="result-label">Hasil</div>
         <div class="result-steps" id="tp-steps"></div>
+        <div id="tp-tiphon"></div>
       </div>
     </div>
   </div>
@@ -480,6 +540,7 @@
       <div class="result-area" id="dl-result">
         <div class="result-label">Hasil</div>
         <div class="result-steps" id="dl-steps"></div>
+        <div id="dl-tiphon"></div>
       </div>
     </div>
   </div>
@@ -507,6 +568,7 @@
       <div class="result-area" id="jt-result">
         <div class="result-label">Hasil</div>
         <div class="result-steps" id="jt-steps"></div>
+        <div id="jt-tiphon"></div>
       </div>
     </div>
   </div>
@@ -540,6 +602,7 @@
           </div>
           <div class="loss-status" id="pl-status"></div>
         </div>
+        <div id="pl-tiphon"></div>
       </div>
     </div>
   </div>
@@ -629,7 +692,6 @@
   const allPopovers = document.querySelectorAll('.info-popover');
   const allBtns     = document.querySelectorAll('.info-btn');
 
-  // posisikan popover relatif ke tombol menggunakan getBoundingClientRect
   function positionPopover(btn, popover) {
     const rect      = btn.getBoundingClientRect();
     const popWidth  = 280;
@@ -642,7 +704,6 @@
 
     let top, left;
 
-    // tentukan arah: bawah atau atas
     if (spaceBelow >= popHeight + gap || spaceBelow >= spaceAbove) {
       top = rect.bottom + gap + window.scrollY;
       popover.classList.remove('arrow-bottom');
@@ -653,7 +714,6 @@
       popover.classList.add('arrow-bottom');
     }
 
-    // posisi horizontal: rata kanan tombol, jangan keluar viewport
     left = rect.right - popWidth + window.scrollX;
     if (left < margin) left = margin;
     if (left + popWidth > window.innerWidth - margin) {
@@ -679,11 +739,9 @@
     const popover = document.getElementById(btn.dataset.popover);
     const accent  = btn.dataset.accent;
 
-    // terapkan warna accent ke popover
     popover.style.setProperty('--pop-accent', accent);
 
     if (!isTouch()) {
-      // desktop: hover
       btn.addEventListener('mouseenter', () => {
         closeAll(popover);
         popover.classList.add('show');
@@ -705,7 +763,6 @@
         }
       });
     } else {
-      // mobile/tablet: tap
       btn.addEventListener('click', (e) => {
         e.stopPropagation();
         const isOpen = popover.classList.contains('show');
@@ -719,10 +776,8 @@
     }
   });
 
-  // tutup popover klik di luar (touch)
   document.addEventListener('click', () => { if (isTouch()) closeAll(); });
 
-  // reposisi saat scroll atau resize
   window.addEventListener('scroll', () => {
     const openPopover = document.querySelector('.info-popover.show');
     if (!openPopover) return;
@@ -755,6 +810,56 @@
     }).join('');
   }
 
+  // render badge kategori TIPHON
+  function renderTiphon(elId, kategori, indeks, satuan) {
+    const ikonMap = { 4: '🟢', 3: '🔵', 2: '🟡', 1: '🟠', 0: '🔴' };
+    const ikon = ikonMap[indeks] ?? '⚪';
+    document.getElementById(elId).innerHTML = `
+      <div class="tiphon-badge tiphon-lvl-${indeks}">
+        <span class="tiphon-icon">${ikon}</span>
+        <div class="tiphon-info">
+          <div class="tiphon-label">Kategori TIPHON · ${satuan}</div>
+          <div class="tiphon-kategori">${kategori}</div>
+        </div>
+        <span class="tiphon-indeks">Indeks ${indeks}</span>
+      </div>`;
+  }
+
+  // klasifikasi throughput (dalam bps)
+  function tiphonThroughput(bps) {
+    const kbps = bps / 1000;
+    const mbps = bps / 1000000;
+    if (mbps > 2.1)               return { kategori: 'Sangat Baik', indeks: 4 };
+    if (kbps >= 1200)             return { kategori: 'Baik',        indeks: 3 };
+    if (kbps >= 700)              return { kategori: 'Cukup',       indeks: 2 };
+    if (kbps >= 338)              return { kategori: 'Kurang Baik', indeks: 1 };
+    return                               { kategori: 'Buruk',       indeks: 0 };
+  }
+
+  // klasifikasi delay (dalam ms)
+  function tiphonDelay(ms) {
+    if (ms < 150)  return { kategori: 'Sangat Bagus', indeks: 4 };
+    if (ms <= 300) return { kategori: 'Bagus',        indeks: 3 };
+    if (ms <= 450) return { kategori: 'Sedang',       indeks: 2 };
+    return                { kategori: 'Buruk',        indeks: 1 };
+  }
+
+  // klasifikasi jitter (dalam ms)
+  function tiphonJitter(ms) {
+    if (ms === 0)  return { kategori: 'Sangat Bagus', indeks: 4 };
+    if (ms <= 75)  return { kategori: 'Bagus',        indeks: 3 };
+    if (ms <= 125) return { kategori: 'Sedang',       indeks: 2 };
+    return                { kategori: 'Buruk',        indeks: 1 };
+  }
+
+  // klasifikasi packet loss (dalam persen)
+  function tiphonPacketLoss(pct) {
+    if (pct <= 2)  return { kategori: 'Sangat Bagus', indeks: 4 };
+    if (pct <= 14) return { kategori: 'Bagus',        indeks: 3 };
+    if (pct <= 24) return { kategori: 'Sedang',       indeks: 2 };
+    return                { kategori: 'Buruk',        indeks: 1 };
+  }
+
   // hitung throughput
   function hitungThroughput() {
     const bytes = parseFloat(document.getElementById('tp-bytes').value);
@@ -776,6 +881,8 @@
       { op: '=',            val: `${fmt(kbps,3)} kbps` },
       { op: '=',            val: `${fmt(mbps,6)} Mbps` },
     ]);
+    const t = tiphonThroughput(bps);
+    renderTiphon('tp-tiphon', t.kategori, t.indeks, 'Throughput');
     document.getElementById('tp-result').classList.add('show');
   }
 
@@ -796,6 +903,8 @@
       { op: '=',                 val: `${avgDetik.toFixed(9)} detik` },
       { op: '=',                 val: `${fmt(avgMs,6)} ms` },
     ]);
+    const t = tiphonDelay(avgMs);
+    renderTiphon('dl-tiphon', t.kategori, t.indeks, 'Delay');
     document.getElementById('dl-result').classList.add('show');
   }
 
@@ -817,6 +926,8 @@
       { op: '=',                  val: `${avgDetik.toFixed(12)} detik` },
       { op: '=',                  val: `${fmt(avgMs,9)} ms` },
     ]);
+    const t = tiphonJitter(avgMs);
+    renderTiphon('jt-tiphon', t.kategori, t.indeks, 'Jitter');
     document.getElementById('jt-result').classList.add('show');
   }
 
@@ -846,6 +957,8 @@
     document.getElementById('pl-bar').style.width = Math.min(persen, 100) + '%';
     document.getElementById('pl-bar').style.background = statusColor;
     document.getElementById('pl-status').innerHTML = `<span style="color:${statusColor}">${statusIcon} ${statusText}</span>`;
+    const t = tiphonPacketLoss(persen);
+    renderTiphon('pl-tiphon', t.kategori, t.indeks, 'Packet Loss');
     document.getElementById('pl-result').classList.add('show');
   }
 
