@@ -21,6 +21,7 @@ function parseCSV(text) {
 
   if (times.length < 2) throw new Error("Data tidak cukup (minimal 2 paket)");
 
+  // kolom G: Delay = Time[n+1] - Time[n]
   const deltaTime = [];
   for (let i = 1; i < times.length; i++) {
     deltaTime.push(times[i] - times[i - 1]);
@@ -29,10 +30,16 @@ function parseCSV(text) {
   const totalDelay = deltaTime.reduce((a, b) => a + b, 0);
   const jumlahPaket = times.length;
 
+  // kolom J: Delay1 = Delay[n] - Delay[n+1]
+  // kolom K: Delay2 = Delay[n+1]
+  // kolom L: Jitter = K - J = Delay[n+1] - (Delay[n] - Delay[n+1])
   const deltaJitter = [];
-  for (let i = 1; i < deltaTime.length; i++) {
-    deltaJitter.push(Math.abs(deltaTime[i] - deltaTime[i - 1]));
+  for (let i = 0; i < deltaTime.length - 1; i++) {
+    const j_col = deltaTime[i] - deltaTime[i + 1];
+    const k_col = deltaTime[i + 1];
+    deltaJitter.push(k_col - j_col);
   }
+
   const totalJitter = deltaJitter.reduce((a, b) => a + b, 0);
 
   return { totalDelay, jumlahPaket, totalJitter };

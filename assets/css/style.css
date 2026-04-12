@@ -31,7 +31,9 @@ body {
 }
 
 .qos-header .badge-label {
-  display: inline-block;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
   font-family: 'DM Mono', monospace;
   font-size: 0.7rem;
   letter-spacing: 0.15em;
@@ -116,6 +118,7 @@ body {
   font-size: 1.6rem;
   margin-bottom: 0.4rem;
   color: var(--accent);
+  line-height: 1;
 }
 
 .csv-upload-area p {
@@ -135,6 +138,9 @@ body {
   padding: 6px 16px;
   cursor: pointer;
   transition: opacity 0.2s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.35rem;
 }
 
 .btn-upload:hover { opacity: 0.8; }
@@ -178,7 +184,13 @@ body {
   color: var(--text-muted);
   margin-top: 0.5rem;
   font-style: italic;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.35rem;
+  line-height: 1.5;
 }
+
+.manual-hint i { flex-shrink: 0; margin-top: 1px; }
 
 /* tiphon toggle */
 .tiphon-toggle-wrap {
@@ -252,10 +264,6 @@ body {
   align-items: start;
 }
 
-@media (max-width: 768px) {
-  .qos-grid { grid-template-columns: 1fr; }
-}
-
 .qos-card {
   background: var(--bg-card);
   border: 1px solid var(--border);
@@ -282,6 +290,8 @@ body {
   gap: 0.6rem;
   padding: 1rem 1.25rem 0.9rem;
   border-bottom: 1px solid var(--border);
+  flex-wrap: nowrap;
+  min-width: 0;
 }
 
 .card-num {
@@ -292,6 +302,7 @@ body {
   background: var(--accent-color, var(--accent));
   width: 22px;
   height: 22px;
+  min-width: 22px;
   border-radius: 50%;
   display: flex;
   align-items: center;
@@ -304,6 +315,11 @@ body {
   font-size: 1rem;
   color: var(--text);
   letter-spacing: 0.02em;
+  flex: 1;
+  min-width: 0;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .card-throughput { --accent-color: #b5541a; }
@@ -313,7 +329,6 @@ body {
 
 /* auto-filled indicator */
 .card-autofill {
-  margin-left: auto;
   font-family: 'DM Mono', monospace;
   font-size: 0.62rem;
   font-weight: 500;
@@ -323,15 +338,19 @@ body {
   padding: 2px 7px;
   border-radius: 20px;
   display: none;
+  align-items: center;
+  gap: 0.3rem;
+  flex-shrink: 0;
   animation: fadeIn 0.3s ease both;
+  white-space: nowrap;
 }
 
-.card-autofill.show { display: inline-block; }
+.card-autofill.show { display: inline-flex; }
 
 .info-btn {
-  margin-left: auto;
   width: 24px;
   height: 24px;
+  min-width: 24px;
   border-radius: 50%;
   border: 1.5px solid var(--accent-color, var(--accent));
   color: var(--accent-color, var(--accent));
@@ -354,9 +373,10 @@ body {
   color: #fff;
 }
 
+/* popover */
 .info-popover {
   position: fixed;
-  width: 300px;
+  width: min(300px, calc(100vw - 24px));
   background: #fff;
   border: 1px solid var(--border);
   border-radius: 10px;
@@ -407,7 +427,7 @@ body {
 .popover-frac-wrap {
   display: flex;
   align-items: center;
-  gap: 7px;
+  gap: 6px;
   flex-wrap: wrap;
   background: var(--bg-result);
   border: 1px solid var(--border);
@@ -496,7 +516,14 @@ body {
   color: var(--pop-accent, #b5541a);
   font-family: 'DM Mono', monospace;
   margin-top: 0.15rem;
+  display: flex;
+  align-items: flex-start;
+  gap: 0.3rem;
+  line-height: 1.4;
+  word-break: break-word;
 }
+
+.popover-var-src i { flex-shrink: 0; margin-top: 1px; }
 
 .card-body-qos { padding: 1.25rem; }
 
@@ -517,6 +544,7 @@ body {
 
 .input-row input {
   flex: 1;
+  min-width: 0;
   font-family: 'DM Mono', monospace;
   font-size: 0.82rem;
   padding: 6px 10px;
@@ -614,7 +642,10 @@ body {
   text-align: right;
 }
 
-.step-val { color: var(--text-result); }
+.step-val {
+  color: var(--text-result);
+  word-break: break-word;
+}
 
 .step-final .step-val {
   color: var(--accent-color, var(--accent));
@@ -631,6 +662,8 @@ body {
   border-radius: 7px;
   border: 1px solid;
   animation: fadeIn 0.3s ease both;
+  flex-wrap: nowrap;
+  min-width: 0;
 }
 
 .tiphon-badge .tiphon-icon { font-size: 1rem; flex-shrink: 0; }
@@ -648,6 +681,9 @@ body {
 .tiphon-badge .tiphon-kategori {
   font-family: 'DM Serif Display', serif;
   font-size: 0.92rem;
+  white-space: nowrap;
+  overflow: hidden;
+  text-overflow: ellipsis;
 }
 
 .tiphon-badge .tiphon-indeks {
@@ -657,6 +693,7 @@ body {
   padding: 2px 8px;
   border-radius: 20px;
   flex-shrink: 0;
+  white-space: nowrap;
 }
 
 .tiphon-lvl-4 { background: #edfaf3; border-color: #6fcf97; color: #1a5c35; }
@@ -703,7 +740,11 @@ body {
   color: #c0392b;
   margin-top: 0.4rem;
   display: none;
+  align-items: center;
+  gap: 0.3rem;
 }
+
+.input-error i { flex-shrink: 0; }
 
 /* animations */
 @keyframes fadeDown {
@@ -741,6 +782,10 @@ body {
   border-radius: 7px;
   cursor: pointer;
   transition: background 0.2s, color 0.2s, transform 0.15s;
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
 }
 
 .btn-download:hover {
@@ -770,6 +815,9 @@ body {
   padding: 8px 20px;
   cursor: pointer;
   transition: background 0.2s, color 0.2s, transform 0.15s;
+  display: inline-flex;
+  align-items: center;
+  gap: 0.4rem;
 }
 
 .btn-download-all:hover {
@@ -779,3 +827,150 @@ body {
 }
 
 .btn-download-all:active { transform: translateY(0); }
+
+/* ── Responsive ────────────────────────────────────────────────────────────── */
+
+/* 768px: grid 2 kolom → 1 kolom */
+@media (max-width: 768px) {
+  .qos-grid {
+    grid-template-columns: 1fr;
+    gap: 1.25rem;
+  }
+
+  .qos-header {
+    margin-bottom: 2rem;
+  }
+}
+
+/* 576px: padding body lebih rapat, input-row layout berubah */
+@media (max-width: 576px) {
+  body {
+    padding: 1.5rem 0.75rem 3rem;
+  }
+
+  .qos-header h1 {
+    font-size: clamp(1.5rem, 6vw, 1.9rem);
+  }
+
+  .qos-header p {
+    font-size: 0.82rem;
+  }
+
+  .csv-box {
+    padding: 1rem;
+  }
+
+  .csv-upload-area {
+    padding: 1.25rem 0.75rem;
+  }
+
+  /* input-row: label pindah ke atas, input full width */
+  .input-row {
+    flex-wrap: wrap;
+    gap: 0.3rem 0.5rem;
+  }
+
+  .input-row label {
+    min-width: unset;
+    width: 100%;
+    font-size: 0.74rem;
+  }
+
+  .input-row input {
+    flex: 1;
+  }
+
+  .card-body-qos {
+    padding: 1rem;
+  }
+
+  .card-head {
+    padding: 0.85rem 1rem;
+  }
+
+  .download-all-wrap {
+    justify-content: stretch;
+  }
+
+  .btn-download-all {
+    width: 100%;
+    justify-content: center;
+  }
+
+  .tiphon-toggle-wrap {
+    justify-content: flex-start;
+  }
+}
+
+/* 480px: result steps font lebih kecil supaya tidak overflow */
+@media (max-width: 480px) {
+  .result-steps {
+    font-size: 0.74rem;
+  }
+
+  .step-line {
+    grid-template-columns: 1fr;
+    gap: 0;
+  }
+
+  .step-op {
+    text-align: left;
+    color: var(--text-muted);
+    font-size: 0.68rem;
+  }
+
+  .step-val {
+    padding-left: 0.75rem;
+    font-size: 0.78rem;
+  }
+
+  .tiphon-badge {
+    flex-wrap: wrap;
+    gap: 0.4rem;
+  }
+
+  .tiphon-badge .tiphon-indeks {
+    margin-left: auto;
+  }
+
+  .card-autofill {
+    font-size: 0.58rem;
+    padding: 2px 5px;
+  }
+}
+
+/* 360px: edge case layar sangat kecil */
+@media (max-width: 360px) {
+  body {
+    padding: 1.25rem 0.5rem 3rem;
+  }
+
+  .csv-section-title {
+    font-size: 0.92rem;
+    flex-wrap: wrap;
+  }
+
+  .card-title {
+    font-size: 0.9rem;
+  }
+
+  .btn-hitung,
+  .btn-download {
+    font-size: 0.76rem;
+  }
+
+  .popover-frac-wrap {
+    gap: 4px;
+    padding: 0.5rem;
+  }
+
+  .popover-num,
+  .popover-den {
+    font-size: 0.65rem;
+  }
+
+  .popover-arrow,
+  .popover-unit {
+    font-size: 0.62rem;
+  }
+}

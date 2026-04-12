@@ -93,16 +93,17 @@ function hitungThroughput() {
 function hitungDelay() {
   const total = parseFloat(document.getElementById("dl-total").value);
   const paket = parseFloat(document.getElementById("dl-paket").value);
-  if (!total || !paket || total <= 0 || paket <= 0) {
+  if (!total || !paket || total <= 0 || paket <= 1) {
     showError("dl-err", true);
     document.getElementById("dl-result").classList.remove("show");
     return;
   }
   showError("dl-err", false);
-  const avgDetik = total / paket;
+  const avgDetik = total / (paket - 1);
   const avgMs = avgDetik * 1000;
   document.getElementById("dl-steps").innerHTML = buildSteps([
-    { op: "Delay =", val: `${fmt(total, 6)} / ${fmt(paket, 0)}` },
+    { op: "Delay =", val: `${fmt(total, 6)} / (${fmt(paket, 0)} − 1)` },
+    { op: "=", val: `${fmt(total, 6)} / ${fmt(paket - 1, 0)}` },
     { op: "=", val: `${fmt(avgDetik, 6)} detik` },
     { op: "=", val: `(${fmt(avgDetik, 6)} × 1000) ms` },
     { op: "=", val: `${fmt(avgMs, 3)} ms` },

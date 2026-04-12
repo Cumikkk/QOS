@@ -4,6 +4,7 @@
   <meta charset="UTF-8" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
   <title>Network QoS Calculator</title>
+  <link rel="icon" type="image/svg+xml" href="data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 16 16'%3E%3Crect width='16' height='16' rx='3' fill='%23b5541a'/%3E%3Cpath fill='white' d='M2 11h2v2H2zm3-3h2v5H5zm3-3h2v8H8zm3-2h2v10h-2z'/%3E%3C/svg%3E" />
   <link rel="preconnect" href="https://fonts.googleapis.com" />
   <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
   <link href="https://fonts.googleapis.com/css2?family=DM+Serif+Display&family=DM+Mono:wght@400;500&family=DM+Sans:wght@300;400;500;600&display=swap" rel="stylesheet" />
@@ -15,7 +16,7 @@
 
 <!-- header -->
 <div class="qos-header">
-  <div class="badge-label">Wireshark · QoS Analysis</div>
+  <div class="badge-label"><i class="bi bi-activity"></i> Wireshark · QoS Analysis</div>
   <h1>Network QoS Calculator</h1>
   <p>Hitung Throughput, Delay, Jitter, dan Packet Loss secara terpisah</p>
 </div>
@@ -23,17 +24,17 @@
 <!-- csv section -->
 <div class="csv-section">
   <div class="csv-section-title">
-    Import dari Wireshark CSV
+    <i class="bi bi-filetype-csv"></i> Import dari Wireshark CSV
     <span class="csv-badge">OPSIONAL</span>
   </div>
   <div class="csv-box">
     <div class="csv-upload-area" id="csv-drop">
       <input type="file" id="csv-file" accept=".csv" />
-      <div class="csv-upload-icon">📂</div>
-      <p>Drag & drop file CSV dari Wireshark, atau</p>
-      <button class="btn-upload" type="button">Pilih File CSV</button>
+      <div class="csv-upload-icon"><i class="bi bi-folder2-open"></i></div>
+      <p>Drag &amp; drop file CSV dari Wireshark, atau</p>
+      <button class="btn-upload" type="button"><i class="bi bi-upload"></i> Pilih File CSV</button>
     </div>
-    <div class="csv-divider">atau isi manual di kartu bawah</div>
+    <div class="csv-divider">isi manual di kartu bawah</div>
     <div class="csv-status" id="csv-status"></div>
   </div>
 </div>
@@ -57,7 +58,7 @@
     <div class="card-head">
       <div class="card-num">1</div>
       <span class="card-title">Delay</span>
-      <span class="card-autofill" id="dl-autofill">✦ auto</span>
+      <span class="card-autofill" id="dl-autofill"><i class="bi bi-magic"></i> auto</span>
       <button class="info-btn" data-popover="pop-dl" data-accent="#1a5c8a" aria-label="Info rumus">i</button>
     </div>
     <div class="card-body-qos">
@@ -71,14 +72,14 @@
         <input type="number" id="dl-paket" placeholder="665" min="1" />
         <span class="unit">paket</span>
       </div>
-      <p class="manual-hint">💡 Atau upload CSV di atas untuk mengisi & menghitung otomatis</p>
-      <div class="input-error" id="dl-err">Masukkan nilai yang valid (> 0)</div>
+      <p class="manual-hint"><i class="bi bi-lightbulb"></i> Upload CSV di atas untuk mengisi &amp; menghitung otomatis</p>
+      <div class="input-error" id="dl-err"><i class="bi bi-exclamation-circle"></i> Masukkan nilai yang valid (Jumlah Paket minimal 2)</div>
       <button class="btn-hitung" onclick="hitungDelay()">Hitung Delay</button>
       <div class="result-area" id="dl-result">
         <div class="result-label">Hasil</div>
         <div class="result-steps" id="dl-steps"></div>
         <div id="dl-tiphon"></div>
-        <button class="btn-download" onclick="downloadResult('dl-result')">⬇ Download Hasil</button>
+        <button class="btn-download" onclick="downloadResult('dl-result')"><i class="bi bi-download"></i> Download Hasil</button>
       </div>
     </div>
   </div>
@@ -88,7 +89,7 @@
     <div class="card-head">
       <div class="card-num">2</div>
       <span class="card-title">Jitter</span>
-      <span class="card-autofill" id="jt-autofill">✦ auto</span>
+      <span class="card-autofill" id="jt-autofill"><i class="bi bi-magic"></i> auto</span>
       <button class="info-btn" data-popover="pop-jt" data-accent="#2a7a4a" aria-label="Info rumus">i</button>
     </div>
     <div class="card-body-qos">
@@ -102,14 +103,14 @@
         <input type="number" id="jt-paket" placeholder="665" min="1" />
         <span class="unit">paket</span>
       </div>
-      <p class="manual-hint">💡 Atau upload CSV di atas untuk mengisi & menghitung otomatis</p>
-      <div class="input-error" id="jt-err">Masukkan nilai yang valid (Jumlah Paket minimal 2)</div>
+      <p class="manual-hint"><i class="bi bi-lightbulb"></i> Upload CSV di atas untuk mengisi &amp; menghitung otomatis</p>
+      <div class="input-error" id="jt-err"><i class="bi bi-exclamation-circle"></i> Masukkan nilai yang valid (Jumlah Paket minimal 2)</div>
       <button class="btn-hitung" onclick="hitungJitter()">Hitung Jitter</button>
       <div class="result-area" id="jt-result">
         <div class="result-label">Hasil</div>
         <div class="result-steps" id="jt-steps"></div>
         <div id="jt-tiphon"></div>
-        <button class="btn-download" onclick="downloadResult('jt-result')">⬇ Download Hasil</button>
+        <button class="btn-download" onclick="downloadResult('jt-result')"><i class="bi bi-download"></i> Download Hasil</button>
       </div>
     </div>
   </div>
@@ -132,14 +133,14 @@
         <input type="number" id="tp-time" placeholder="5.663" min="0" step="any" />
         <span class="unit">detik</span>
       </div>
-      <p class="manual-hint">📍 Capture File Properties → Bytes & Time span</p>
-      <div class="input-error" id="tp-err">Masukkan nilai yang valid (> 0)</div>
+      <p class="manual-hint"><i class="bi bi-info-circle"></i> Buka <strong>Statistics → Capture File Properties</strong> di Wireshark</p>
+      <div class="input-error" id="tp-err"><i class="bi bi-exclamation-circle"></i> Masukkan nilai yang valid (> 0)</div>
       <button class="btn-hitung" onclick="hitungThroughput()">Hitung Throughput</button>
       <div class="result-area" id="tp-result">
         <div class="result-label">Hasil</div>
         <div class="result-steps" id="tp-steps"></div>
         <div id="tp-tiphon"></div>
-        <button class="btn-download" onclick="downloadResult('tp-result')">⬇ Download Hasil</button>
+        <button class="btn-download" onclick="downloadResult('tp-result')"><i class="bi bi-download"></i> Download Hasil</button>
       </div>
     </div>
   </div>
@@ -162,28 +163,28 @@
         <input type="number" id="pl-hilang" placeholder="146" min="0" />
         <span class="unit">paket</span>
       </div>
-      <p class="manual-hint">📍 Packets (Captured) & Displayed dari filter <code>tcp.analysis.lost_segment</code></p>
-      <div class="input-error" id="pl-err">Masukkan nilai yang valid (Hilang ≤ Terkirim)</div>
+      <p class="manual-hint"><i class="bi bi-info-circle"></i> Gunakan filter <code>tcp.analysis.lost_segment</code> di Wireshark, lalu lihat jumlah <strong>Displayed</strong></p>
+      <div class="input-error" id="pl-err"><i class="bi bi-exclamation-circle"></i> Masukkan nilai yang valid (Paket Hilang ≤ Paket Terkirim)</div>
       <button class="btn-hitung" onclick="hitungPacketLoss()">Hitung Packet Loss</button>
       <div class="result-area" id="pl-result">
         <div class="result-label">Hasil</div>
         <div class="result-steps" id="pl-steps"></div>
         <div id="pl-tiphon"></div>
-        <button class="btn-download" onclick="downloadResult('pl-result')">⬇ Download Hasil</button>
+        <button class="btn-download" onclick="downloadResult('pl-result')"><i class="bi bi-download"></i> Download Hasil</button>
       </div>
     </div>
   </div>
 
 </div>
 
-<!-- tombol download semua, di bawah grid -->
+<!-- tombol download semua -->
 <div class="download-all-wrap">
-  <button class="btn-download-all" onclick="downloadAllResults()">⬇ Download Semua Hasil</button>
+  <button class="btn-download-all" onclick="downloadAllResults()"><i class="bi bi-download"></i> Download Semua Hasil</button>
 </div>
 
 <!-- popover throughput -->
 <div class="info-popover" id="pop-tp">
-  <div class="popover-title">📐 Rumus Throughput</div>
+  <div class="popover-title"><i class="bi bi-rulers"></i> Rumus Throughput</div>
   <div class="popover-frac-wrap">
     <span class="popover-eq-label">T</span>
     <span class="popover-eq-sign">=</span>
@@ -192,54 +193,54 @@
       <span class="popover-line"></span>
       <span class="popover-den">Time Span</span>
     </span>
-    <span class="popover-arrow">→ ×8 → ÷1000</span>
+    <span class="popover-arrow">× 8 ÷ 1000</span>
     <span class="popover-unit">Kbits/s</span>
   </div>
   <div class="popover-vars">
     <div class="popover-var-item">
       <div class="popover-var-name">Total Bytes</div>
-      <div class="popover-var-desc">Total ukuran semua paket yang diterima</div>
-      <div class="popover-var-src">📍 Capture File Properties → Bytes (Displayed)</div>
+      <div class="popover-var-desc">Total ukuran semua paket yang tertangkap</div>
+      <div class="popover-var-src"><i class="bi bi-geo-alt"></i> Statistics → Capture File Properties → Bytes (Captured)</div>
     </div>
     <div class="popover-var-item">
       <div class="popover-var-name">Time Span</div>
-      <div class="popover-var-desc">Selisih waktu paket pertama dan terakhir</div>
-      <div class="popover-var-src">📍 Capture File Properties → Time span, s</div>
+      <div class="popover-var-desc">Selisih waktu antara paket pertama dan paket terakhir</div>
+      <div class="popover-var-src"><i class="bi bi-geo-alt"></i> Statistics → Capture File Properties → Time span, s</div>
     </div>
   </div>
 </div>
 
 <!-- popover delay -->
 <div class="info-popover" id="pop-dl">
-  <div class="popover-title">📐 Rumus Delay</div>
+  <div class="popover-title"><i class="bi bi-rulers"></i> Rumus Delay</div>
   <div class="popover-frac-wrap">
     <span class="popover-eq-label">D</span>
     <span class="popover-eq-sign">=</span>
     <span class="popover-frac">
       <span class="popover-num">Total Delay</span>
       <span class="popover-line"></span>
-      <span class="popover-den">Jumlah Paket</span>
+      <span class="popover-den">Jumlah Paket − 1</span>
     </span>
-    <span class="popover-arrow">→ ×1000</span>
+    <span class="popover-arrow">× 1000</span>
     <span class="popover-unit">ms</span>
   </div>
   <div class="popover-vars">
     <div class="popover-var-item">
       <div class="popover-var-name">Total Delay</div>
-      <div class="popover-var-desc">Σ selisih waktu antar paket (delta time)</div>
-      <div class="popover-var-src">📍 Dihitung otomatis dari CSV</div>
+      <div class="popover-var-desc">Jumlah seluruh selisih waktu antar paket (delta time). Dihitung otomatis jika upload CSV.</div>
+      <div class="popover-var-src"><i class="bi bi-geo-alt"></i> Excel: SUM kolom Delay (Time 2 − Time 1)</div>
     </div>
     <div class="popover-var-item">
       <div class="popover-var-name">Jumlah Paket</div>
-      <div class="popover-var-desc">Total paket yang tertangkap Wireshark</div>
-      <div class="popover-var-src">📍 Capture File Properties → Packets</div>
+      <div class="popover-var-desc">Total paket yang tertangkap Wireshark. Dibagi N−1 karena selisih antar N paket menghasilkan N−1 interval.</div>
+      <div class="popover-var-src"><i class="bi bi-geo-alt"></i> Statistics → Capture File Properties → Packets (Captured)</div>
     </div>
   </div>
 </div>
 
 <!-- popover jitter -->
 <div class="info-popover" id="pop-jt">
-  <div class="popover-title">📐 Rumus Jitter</div>
+  <div class="popover-title"><i class="bi bi-rulers"></i> Rumus Jitter</div>
   <div class="popover-frac-wrap">
     <span class="popover-eq-label">J</span>
     <span class="popover-eq-sign">=</span>
@@ -248,32 +249,32 @@
       <span class="popover-line"></span>
       <span class="popover-den">Jumlah Paket − 1</span>
     </span>
-    <span class="popover-arrow">→ ×1000</span>
+    <span class="popover-arrow">× 1000</span>
     <span class="popover-unit">ms</span>
   </div>
   <div class="popover-vars">
     <div class="popover-var-item">
       <div class="popover-var-name">Total Jitter</div>
-      <div class="popover-var-desc">Σ |ΔT[n] − ΔT[n-1]| antar paket</div>
-      <div class="popover-var-src">📍 Dihitung otomatis dari CSV</div>
+      <div class="popover-var-desc">Jumlah seluruh variasi antar delay. Dihitung sebagai Delay 2 − Delay 1, bisa bernilai positif maupun negatif.</div>
+      <div class="popover-var-src"><i class="bi bi-geo-alt"></i> Excel: SUM kolom Jitter (Delay 2 − Delay 1)</div>
     </div>
     <div class="popover-var-item">
       <div class="popover-var-name">Jumlah Paket − 1</div>
-      <div class="popover-var-desc">Karena variasi dihitung antar pasangan delta</div>
+      <div class="popover-var-desc">Sama dengan delay, variasi dihitung antar pasangan sehingga menghasilkan N−1 data jitter.</div>
     </div>
   </div>
 </div>
 
 <!-- popover packet loss -->
 <div class="info-popover" id="pop-pl">
-  <div class="popover-title">📐 Rumus Packet Loss</div>
+  <div class="popover-title"><i class="bi bi-rulers"></i> Rumus Packet Loss</div>
   <div class="popover-frac-wrap">
     <span class="popover-eq-label">PL</span>
     <span class="popover-eq-sign">=</span>
     <span class="popover-frac">
       <span class="popover-num">Paket Hilang</span>
       <span class="popover-line"></span>
-      <span class="popover-den">Terkirim</span>
+      <span class="popover-den">Paket Terkirim</span>
     </span>
     <span class="popover-arrow">× 100</span>
     <span class="popover-unit">%</span>
@@ -281,13 +282,13 @@
   <div class="popover-vars">
     <div class="popover-var-item">
       <div class="popover-var-name">Paket Terkirim</div>
-      <div class="popover-var-desc">Total paket yang tertangkap (Captured)</div>
-      <div class="popover-var-src">📍 Capture File Properties → Packets</div>
+      <div class="popover-var-desc">Total seluruh paket yang tertangkap oleh Wireshark</div>
+      <div class="popover-var-src"><i class="bi bi-geo-alt"></i> Statistics → Capture File Properties → Packets (Captured)</div>
     </div>
     <div class="popover-var-item">
       <div class="popover-var-name">Paket Hilang</div>
-      <div class="popover-var-desc">Jumlah paket yang terdeteksi hilang oleh Wireshark</div>
-      <div class="popover-var-src">📍 Filter tcp.analysis.lost_segment → Displayed</div>
+      <div class="popover-var-desc">Jumlah paket yang terdeteksi hilang oleh analisis TCP Wireshark</div>
+      <div class="popover-var-src"><i class="bi bi-geo-alt"></i> Filter: tcp.analysis.lost_segment → lihat angka Displayed</div>
     </div>
   </div>
 </div>
