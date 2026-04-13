@@ -21,8 +21,15 @@ function buildSteps(lines) {
 }
 
 function renderTiphon(elId, kategori, indeks, satuan) {
-  const ikonMap = { 4: "🟢", 3: "🔵", 2: "🟡", 1: "🟠", 0: "🔴" };
-  const ikon = ikonMap[indeks] ?? "⚪";
+  const ikonMap = {
+    4: `<i class="bi bi-circle-fill" style="color:#6fcf97"></i>`,
+    3: `<i class="bi bi-circle-fill" style="color:#5aade0"></i>`,
+    2: `<i class="bi bi-circle-fill" style="color:#f0c040"></i>`,
+    1: `<i class="bi bi-circle-fill" style="color:#e07a30"></i>`,
+    0: `<i class="bi bi-circle-fill" style="color:#e05555"></i>`,
+  };
+  const ikon =
+    ikonMap[indeks] ?? `<i class="bi bi-circle-fill" style="color:#ccc"></i>`;
   document.getElementById(elId).innerHTML = `
     <div class="tiphon-badge tiphon-lvl-${indeks}">
       <span class="tiphon-icon">${ikon}</span>

@@ -21,7 +21,6 @@ function parseCSV(text) {
 
   if (times.length < 2) throw new Error("Data tidak cukup (minimal 2 paket)");
 
-  // kolom G: Delay = Time[n+1] - Time[n]
   const deltaTime = [];
   for (let i = 1; i < times.length; i++) {
     deltaTime.push(times[i] - times[i - 1]);
@@ -30,9 +29,6 @@ function parseCSV(text) {
   const totalDelay = deltaTime.reduce((a, b) => a + b, 0);
   const jumlahPaket = times.length;
 
-  // kolom J: Delay1 = Delay[n] - Delay[n+1]
-  // kolom K: Delay2 = Delay[n+1]
-  // kolom L: Jitter = K - J = Delay[n+1] - (Delay[n] - Delay[n+1])
   const deltaJitter = [];
   for (let i = 0; i < deltaTime.length - 1; i++) {
     const j_col = deltaTime[i] - deltaTime[i + 1];
@@ -87,33 +83,46 @@ function applyCSVResult(result) {
   hitungJitter();
 }
 
+function showStatus(type, msg) {
+  const status = document.getElementById("csv-status");
+  const ikonMap = {
+    success: `<i class="bi bi-check-circle-fill"></i>`,
+    error: `<i class="bi bi-x-circle-fill"></i>`,
+    info: `<i class="bi bi-arrow-repeat csv-spinner"></i>`,
+  };
+  const ikon = ikonMap[type] ?? "";
+  status.className = `csv-status show ${type}`;
+  status.innerHTML = `${ikon} ${msg}`;
+}
+
 function initCSV() {
   const dropArea = document.getElementById("csv-drop");
   const fileInput = document.getElementById("csv-file");
-  const status = document.getElementById("csv-status");
-
-  function showStatus(type, msg) {
-    status.className = `csv-status show ${type}`;
-    status.innerHTML = msg;
-  }
 
   function processFile(file) {
     if (!file || !file.name.endsWith(".csv")) {
-      showStatus("error", "❌ File harus berformat .csv");
+      showStatus("error", "File harus berformat .csv");
       return;
     }
+
+    // tampilkan loading spinner
+    showStatus("info", "Membaca CSV...");
+
     const reader = new FileReader();
     reader.onload = (e) => {
-      try {
-        const result = parseCSV(e.target.result);
-        applyCSVResult(result);
-        showStatus(
-          "success",
-          `✅ Berhasil membaca <strong>${result.jumlahPaket}</strong> paket — Delay & Jitter telah dihitung otomatis`,
-        );
-      } catch (err) {
-        showStatus("error", `❌ ${err.message}`);
-      }
+      // delay kecil supaya spinner sempat terlihat
+      setTimeout(() => {
+        try {
+          const result = parseCSV(e.target.result);
+          applyCSVResult(result);
+          showStatus(
+            "success",
+            `Berhasil membaca <strong>${result.jumlahPaket}</strong> paket — Delay & Jitter telah dihitung otomatis`,
+          );
+        } catch (err) {
+          showStatus("error", err.message);
+        }
+      }, 600);
     };
     reader.readAsText(file);
   }
